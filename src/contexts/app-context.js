@@ -1,0 +1,79 @@
+'use client'
+
+import { httpGet } from "@/lib/http";
+import localforage from "localforage";
+import { createContext, useEffect, useLayoutEffect, useState } from "react";
+
+export const AppContext = createContext(null);
+export const AppProvider = ({ children }) => {
+  const [token, setToken] = useState(null);
+  const [user, setUser] = useState(null);
+  const [role, setRole] = useState(null);
+  const [refreshToken, setRefreshToken] = useState(null);
+  const [init, setInit] = useState(false);
+  const [routes, setRoutes] = useState({});
+
+  useEffect(() => {
+    (async () => {
+      const rs = await httpGet("routes");
+      if (rs.statusText === "OK") {
+        setRoutes(rs.data);
+      }
+
+      const storedToken = await localforage.getItem("token");
+      const storedUser = await localforage.getItem("user");
+      const storedRole = await localforage.getItem("role");
+      const storedRefreshToken = await localforage.getItem("refreshToken");
+
+      setToken(storedToken);
+      setUser(storedUser);
+      setRole(storedRole);
+      setRefreshToken(storedRefreshToken);
+      setInit(true);
+    })();
+  }, [])
+
+  useLayoutEffect(() => {
+    if (init) {
+      localforage.setItem("user", user).catch(() => {});
+      localforage.setItem("role", role).catch(() => {});
+      localforage.setItem("token", token).catch(() => {});
+      localforage.setItem("refreshToken", refreshToken).catch(() => {});
+    }
+  }, [token, user, role, refreshToken, init])
+
+  return (
+    <AppContext.Provider value={{
+      loading: !init,
+      init,
+      token,
+      setToken,
+      user,
+      setUser,
+      role,
+      setRole,
+      refreshToken,
+      setRefreshToken,
+      getRoute(route, replacements = {}) {
+        const routeKeyWithRole = `api.${role}.${route}`;
+        const routeKeyWithoutRole = `api.${route}`;
+        const str = routes[routeKeyWithRole] ?? routes[routeKeyWithoutRole] ?? route;
+        let index = 0;
+        return str.replace(/\{(\w+)\}/g, (match, key) => {
+          if (Array.isArray(replacements)) {
+            return replacements[index++] ?? match;
+          }
+          return replacements[key] ?? match;
+        });
+      },
+      hasRole(...roles) {
+        if (Array.isArray(roles[0])) {
+          roles = roles[0];
+        }
+        return roles.includes(role);
+      }
+    }}>
+      {children}
+    </AppContext.Provider>
+  );
+};
