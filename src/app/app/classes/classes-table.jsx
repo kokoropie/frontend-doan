@@ -120,7 +120,7 @@ export default ({_class = null, setClass = () => {}, view = '', setView = () => 
                   <span>Xem bảng điểm</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <a href={appContext.getRoute(`classes.scores.excel`, [_class.id])} target="_blank">
+                  <a href={appContext.getRoute(`classes.scores.excel`, [_class.id], true)} target="_blank">
                     <Table2 />
                     <span>Xuất bảng điểm</span>
                   </a>

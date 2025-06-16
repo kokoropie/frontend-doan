@@ -1,6 +1,7 @@
 'use client'
 
 import { httpGet } from "@/lib/http";
+import { rtrim } from "@/lib/utils";
 import localforage from "localforage";
 import { createContext, useEffect, useLayoutEffect, useState } from "react";
 
@@ -54,12 +55,12 @@ export const AppProvider = ({ children }) => {
       setRole,
       refreshToken,
       setRefreshToken,
-      getRoute(route, replacements = {}) {
+      getRoute(route, replacements = {}, withApi = false) {
         const routeKeyWithRole = `api.${role}.${route}`;
         const routeKeyWithoutRole = `api.${route}`;
         const str = routes[routeKeyWithRole] ?? routes[routeKeyWithoutRole] ?? route;
         let index = 0;
-        return str.replace(/\{(\w+)\}/g, (match, key) => {
+        return (withApi ? rtrim(process.env.NEXT_PUBLIC_BACKEND_BASE_URL, "/") + "/api/" : "") + str.replace(/\{(\w+)\}/g, (match, key) => {
           if (Array.isArray(replacements)) {
             return replacements[index++] ?? match;
           }
