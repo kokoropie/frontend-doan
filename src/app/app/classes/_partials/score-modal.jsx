@@ -242,9 +242,9 @@ export default ({ open = false, hide = () => { }, _class = null, setClass = () =
             }}
             unselectable={false}
           />
-          <DropdownMenu>
+          <Button size="sm" disabled={loading} onClick={exportExcel}>Xuất dữ liệu</Button>
+          {/* <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button size="sm" disabled={loading}>Xuất dữ liệu</Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuItem onClick={exportExcel}>
@@ -256,7 +256,7 @@ export default ({ open = false, hide = () => { }, _class = null, setClass = () =
                 <span>Xuất PDF</span>
               </DropdownMenuItem>
             </DropdownMenuContent>
-          </DropdownMenu>
+          </DropdownMenu> */}
         </div>
         <Block isBlocking={loading}>
           <Table data={data} columns={columns} columnPining={{left: ['full_name']}} limit={10} tableClassName="max-h-[calc(100vh-250px)] overflow-y-auto" />
