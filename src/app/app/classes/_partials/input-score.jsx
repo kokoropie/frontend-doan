@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { AppContext } from "@/contexts/app-context";
 import { httpDelete, httpPatch, httpPost } from "@/lib/http";
-import { Check, Edit, Trash } from "lucide-react";
+import { Check, Edit, Trash, X } from "lucide-react";
 import { useContext, useEffect, useRef, useState } from "react";
 
 export default ({ student, _class, type, score = null }) => {
@@ -96,9 +96,9 @@ export default ({ student, _class, type, score = null }) => {
         variant="ghost" 
         size="icon" 
         className="p-0 h-6 w-6" 
-        onClick={removeScore}
+        onClick={() => setEdit(false)}
       >
-        <Trash className="h-4 w-4 text-red-500" />
+        <X className="h-4 w-4 text-red-500" />
       </Button>}
     </div>
   }
