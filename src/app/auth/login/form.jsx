@@ -37,7 +37,7 @@ export default function FormLogin() {
 
   const mutation = useMutation({
     mutationFn: (data) => {
-      return httpPost(appContext.getRoute('auth.login'), data)
+      return httpPost(appContext.getRoute('auth/login'), data)
       .then(res => res.data)
       .then((data) => {
         if (data.status === "success") {
