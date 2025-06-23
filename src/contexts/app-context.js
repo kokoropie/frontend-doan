@@ -7,18 +7,18 @@ import { createContext, useEffect, useLayoutEffect, useState } from "react";
 
 export const AppContext = createContext(null);
 export const AppProvider = ({ children }) => {
+  const [routes, setRoutes] = useState({});
   const [token, setToken] = useState(null);
   const [user, setUser] = useState(null);
   const [role, setRole] = useState(null);
   const [refreshToken, setRefreshToken] = useState(null);
   const [init, setInit] = useState(false);
-  const [routes, setRoutes] = useState({});
 
   useEffect(() => {
     (async () => {
       const rs = await httpGet("routes").then(res => {
         if (res.status === 200) {
-          setRoutes(rs.data);
+          setRoutes(res.data);
         }
       });
 
