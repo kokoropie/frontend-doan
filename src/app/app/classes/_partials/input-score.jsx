@@ -21,6 +21,10 @@ export default ({ student, _class, type, score = null }) => {
     }
 
     if (score?.id) {
+      if (value == score.score) {
+        setEdit(false);
+        return;
+      }
       httpPatch(appContext.getRoute('classes.scores.update', [_class.id, score.id]), {
         score: value
       }).then(() => {
@@ -75,7 +79,7 @@ export default ({ student, _class, type, score = null }) => {
       <Button
         variant="ghost" 
         size="icon" 
-        className="ml-2 p-0 h-6 w-6" 
+        className="p-0 h-6 w-6" 
         onClick={handleChange}
       >
         <Check className="h-4 w-4 text-green-500" />
@@ -83,7 +87,7 @@ export default ({ student, _class, type, score = null }) => {
       <Button
         variant="ghost" 
         size="icon" 
-        className="ml-2 p-0 h-6 w-6" 
+        className="p-0 h-6 w-6" 
         onClick={removeScore}
       >
         <Trash className="h-4 w-4 text-red-500" />
