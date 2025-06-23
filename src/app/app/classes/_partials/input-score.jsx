@@ -11,7 +11,7 @@ export default ({ student, _class, type, score = null }) => {
   const appContext = useContext(AppContext);
   const [edit, setEdit] = useState(false);
   const [value, setValue] = useState(score?.score ?? '');
-  const [sScore, setScore] = useState(score?.score ?? '-');
+  const [sScore, setScore] = useState(score);
   const inputRef = useRef(null);
 
   const handleChange = () => {
@@ -20,16 +20,16 @@ export default ({ student, _class, type, score = null }) => {
       return;
     }
 
-    if (score?.id) {
-      if (value == score.score) {
+    if (sScore?.id) {
+      if (value == sScore.score) {
         setEdit(false);
         return;
       }
-      httpPatch(appContext.getRoute('classes.scores.update', [_class.id, score.id]), {
+      httpPatch(appContext.getRoute('classes.scores.update', [_class.id, sScore.id]), {
         score: value
-      }).then(() => {
+      }).then((res) => {
         setEdit(false);
-        setScore(value);
+        setScore(res.data.data);
       })
     } else {
       httpPost(appContext.getRoute('classes.scores.store', [_class.id]), {
@@ -37,20 +37,21 @@ export default ({ student, _class, type, score = null }) => {
         score: value,
         type: type,
         class_subject_semester_id: score.linked_id
-      }).then(() => {
+      }).then((res) => {
         setEdit(false);
-        setScore(value);
+        setScore(res.data.data);
       })
     }
   }
 
   const removeScore = () => {
-    if (!score?.id) return;
+    if (!sScore?.id) return;
 
-    httpDelete(appContext.getRoute('classes.scores.destroy', [_class.id, score.id]))
+    httpDelete(appContext.getRoute('classes.scores.destroy', [_class.id, sScore.id]))
       .then(() => {
         setEdit(false);
-        setScore('-');
+        setScore(null);
+        setValue('');
       })
       .catch(err => {
         console.error(err);
@@ -82,21 +83,28 @@ export default ({ student, _class, type, score = null }) => {
         className="p-0 h-6 w-6" 
         onClick={handleChange}
       >
-        <Check className="h-4 w-4 text-green-500" />
+        <Check className="ml-1 h-4 w-4 text-green-500" />
       </Button>
-      <Button
+      {sScore?.id ? <Button
         variant="ghost" 
         size="icon" 
         className="p-0 h-6 w-6" 
         onClick={removeScore}
       >
         <Trash className="h-4 w-4 text-red-500" />
-      </Button>
+      </Button> : <Button
+        variant="ghost" 
+        size="icon" 
+        className="p-0 h-6 w-6" 
+        onClick={removeScore}
+      >
+        <Trash className="h-4 w-4 text-red-500" />
+      </Button>}
     </div>
   }
 
   return <div className="w-30 flex items-center justify-between">
-    <span className="pl-1">{sScore}</span>
+    <span className="pl-1">{sScore?.score ?? '-'}</span>
     {score.show_actions && (
       <Button
         variant="ghost" 
