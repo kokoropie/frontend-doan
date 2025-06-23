@@ -3,8 +3,8 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { AppContext } from "@/contexts/app-context";
-import { httpPatch, httpPost } from "@/lib/http";
-import { Check, Edit, X } from "lucide-react";
+import { httpDelete, httpPatch, httpPost } from "@/lib/http";
+import { Check, Edit, Trash, X } from "lucide-react";
 import { useContext, useEffect, useRef, useState } from "react";
 
 export default ({ student, _class, type, score = null }) => {
@@ -40,6 +40,20 @@ export default ({ student, _class, type, score = null }) => {
     }
   }
 
+  const removeScore = () => {
+    if (!score?.id) return;
+
+    httpDelete(appContext.getRoute('classes.scores.remove', [_class.id, score.id]))
+      .then(() => {
+        setEdit(false);
+        setScore('-');
+      })
+      .catch(err => {
+        console.error(err);
+        toast.error('Xóa điểm không thành công');
+      });
+  }
+
   useEffect(() => {
     if (edit && inputRef.current) {
       inputRef.current.focus();
@@ -65,6 +79,14 @@ export default ({ student, _class, type, score = null }) => {
         onClick={handleChange}
       >
         <Check className="h-4 w-4 text-green-500" />
+      </Button>
+      <Button
+        variant="ghost" 
+        size="icon" 
+        className="ml-2 p-0 h-6 w-6" 
+        onClick={removeScore}
+      >
+        <Trash className="h-4 w-4 text-red-500" />
       </Button>
       <Button
         variant="ghost" 

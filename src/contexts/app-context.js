@@ -16,7 +16,7 @@ export const AppProvider = ({ children }) => {
 
   useEffect(() => {
     (async () => {
-      const rs = await httpGet("routes").then(res => {
+      await httpGet("routes").then(res => {
         if (res.status === 200) {
           setRoutes(res.data);
         }
@@ -60,7 +60,6 @@ export const AppProvider = ({ children }) => {
         const routeKeyWithRole = `api.${role}.${route}`;
         const routeKeyWithoutRole = `api.${route}`;
         const str = routes[routeKeyWithRole] ?? routes[routeKeyWithoutRole] ?? route;
-        console.log(routeKeyWithRole, routeKeyWithoutRole, str, routes);
         let index = 0;
         return (withApi ? rtrim(process.env.NEXT_PUBLIC_BACKEND_BASE_URL, "/") + "/api/" : "") + str.replace(/\{(\w+)\}/g, (match, key) => {
           if (Array.isArray(replacements)) {
