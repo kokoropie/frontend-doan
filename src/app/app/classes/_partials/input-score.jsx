@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { AppContext } from "@/contexts/app-context";
 import { httpDelete, httpPatch, httpPost } from "@/lib/http";
-import { Check, Edit, Trash, X } from "lucide-react";
+import { Check, Edit, Trash } from "lucide-react";
 import { useContext, useEffect, useRef, useState } from "react";
 
 export default ({ student, _class, type, score = null }) => {
@@ -43,7 +43,7 @@ export default ({ student, _class, type, score = null }) => {
   const removeScore = () => {
     if (!score?.id) return;
 
-    httpDelete(appContext.getRoute('classes.scores.remove', [_class.id, score.id]))
+    httpDelete(appContext.getRoute('classes.scores.destroy', [_class.id, score.id]))
       .then(() => {
         setEdit(false);
         setScore('-');
@@ -87,14 +87,6 @@ export default ({ student, _class, type, score = null }) => {
         onClick={removeScore}
       >
         <Trash className="h-4 w-4 text-red-500" />
-      </Button>
-      <Button
-        variant="ghost" 
-        size="icon" 
-        className="ml-2 p-0 h-6 w-6" 
-        onClick={() => setEdit(false)}
-      >
-        <X className="h-4 w-4 text-red-500" />
       </Button>
     </div>
   }
