@@ -16,10 +16,11 @@ export const AppProvider = ({ children }) => {
 
   useEffect(() => {
     (async () => {
-      const rs = await httpGet("routes");
-      if (rs.statusText === "OK") {
-        setRoutes(rs.data);
-      }
+      const rs = await httpGet("routes").then(res => {
+        if (res.status === 200) {
+          setRoutes(rs.data);
+        }
+      });
 
       const storedToken = await localforage.getItem("token");
       const storedUser = await localforage.getItem("user");
