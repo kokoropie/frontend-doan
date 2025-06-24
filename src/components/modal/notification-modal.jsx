@@ -23,6 +23,7 @@ export default ({open = false, hide = () => {}}) => {
     httpPost(appContext.getRoute('notifications.mark-as-read')).then(() => {
       toast.success('Đã đánh dấu tất cả thông báo là đã đọc');
       hide();
+      appContext.loadProfile();
     }).catch(err => {
       console.error(err);
       toast.error('Đánh dấu thông báo là đã đọc không thành công');

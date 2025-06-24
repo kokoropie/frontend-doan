@@ -14,6 +14,14 @@ export const AppProvider = ({ children }) => {
   const [refreshToken, setRefreshToken] = useState(null);
   const [init, setInit] = useState(false);
 
+  const loadProfile = () => {
+    httpGet("profile").then(res => {
+      if (res.status === 200) {
+        setUser(res.data.data);
+      }
+    }).catch(() => {});
+  };
+
   useEffect(() => {
     (async () => {
       await httpGet("routes").then(res => {
@@ -52,11 +60,7 @@ export const AppProvider = ({ children }) => {
           setRoutes(res.data);
         }
       }).catch(() => {});
-      httpGet("profile").then(res => {
-        if (res.status === 200) {
-          setUser(res.data.data);
-        }
-      }).catch(() => {});
+      loadProfile();
     }, 120 * 1000)
     return () => clearInterval(interval);
   }, [token])
@@ -73,6 +77,7 @@ export const AppProvider = ({ children }) => {
       setRole,
       refreshToken,
       setRefreshToken,
+      loadProfile,
       getRoute(route, replacements = {}, withApi = false) {
         const routeKeyWithRole = `api.${role}.${route}`;
         const routeKeyWithoutRole = `api.${route}`;
