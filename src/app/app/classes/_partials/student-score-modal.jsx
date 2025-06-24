@@ -151,9 +151,6 @@ export default ({ open = false, hide = () => { }, _class = null, student = null 
         <DialogHeader>
           <DialogTitle>Bảng điểm {student?.full_name}</DialogTitle>
         </DialogHeader>
-        <div className="flex items-center">
-          <Button size="sm" disabled={loading} onClick={exportExcel}>Xuất dữ liệu</Button>
-        </div>
         <Block isBlocking={loading}>
           <Table data={dataScores} columns={columnsScores} columnPining={{left: ['subject']}} limit={10} tableClassName="max-h-[calc(100vh-250px)] overflow-y-auto" />
         </Block>
