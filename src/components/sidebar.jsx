@@ -18,6 +18,11 @@ export default function Sidebar({ ...props }) {
   const pathname = usePathname();
   const appContext = useContext(AppContext);
 
+  const handleLogout = () => {
+    nProgress.start();
+    window.location.href = '/auth/logout'
+  }
+
   return (
     <SidebarBase collapsible="icon" {...props}>
       <SidebarHeader>
@@ -106,11 +111,9 @@ export default function Sidebar({ ...props }) {
                   {appContext.user?.received_notifications_count && <Badge className="ml-1" variant="destructive">{ appContext.user?.received_notifications_count }</Badge>}
                 </Button>
               </DropdownMenuItem>}
-              <DropdownMenuItem asChild>
-                <Link href={'/auth/logout'} onClick={(() => nProgress.start())}>
-                  <LogOut />
-                  Đăng xuất 
-                </Link>
+              <DropdownMenuItem onClick={handleLogout} variant="destructive">
+                <LogOut />
+                Đăng xuất 
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
