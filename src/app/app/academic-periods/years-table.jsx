@@ -111,10 +111,10 @@ export default ({year = null, setYear = () => {}, view = '', setView = () => {}}
                   <span>Xem lớp</span>
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleSetYear(year, 'students')}>
+              {/* <DropdownMenuItem onClick={() => handleSetYear(year, 'students')}>
                 <GraduationCap />
                 <span>Xem học sinh</span>
-              </DropdownMenuItem>
+              </DropdownMenuItem> */}
               {appContext.hasRole('admin') && <>
                 <DropdownMenuSeparator />
                 {!year.current && <DropdownMenuItem variant="warning" onClick={() => showModal(year, 'set-year')}>

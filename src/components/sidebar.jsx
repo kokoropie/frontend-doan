@@ -2,7 +2,7 @@
 
 import { Sidebar as SidebarBase, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarRail } from "@/components/ui/sidebar";
 import { intialName } from "@/lib/utils";
-import { Blocks, BookCopy, BookPlus, BookUser, Calendar, ChevronsUpDown, Gauge, GraduationCap, LogOut, MessagesSquare, Plus, UserPlus, Users } from "lucide-react";
+import { Blocks, BookCopy, BookPlus, BookUser, Calendar, ChevronsUpDown, Gauge, GraduationCap, LogOut, MessageCircle, MessagesSquare, Plus, Send, UserPlus, Users } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import SidebarItem from "./sidebar/item";
@@ -11,6 +11,8 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem,
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import nProgress from "nprogress";
 import { AppContext } from "@/contexts/app-context";
+import { Button } from "./ui/button";
+import { Badge } from "./ui/badge";
 
 export default function Sidebar({ ...props }) {
   const pathname = usePathname();
@@ -91,6 +93,19 @@ export default function Sidebar({ ...props }) {
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
+              {appContext.hasRole('admin', 'teacher') && <DropdownMenuItem asChild>
+                <Button onClick={(() => nProgress.start())}>
+                  <Send />
+                  Gửi thông báo
+                </Button>
+              </DropdownMenuItem>}
+              {!appContext.hasRole('admin') && <DropdownMenuItem asChild>
+                <Button onClick={(() => nProgress.start())}>
+                  <MessageCircle />
+                  Thông báo
+                  {appContext.user?.received_notifications_count && <Badge className="ml-1" variant="destructive">{ appContext.user?.received_notifications_count }</Badge>}
+                </Button>
+              </DropdownMenuItem>}
               <DropdownMenuItem asChild>
                 <Link href={'/auth/logout'} onClick={(() => nProgress.start())}>
                   <LogOut />
