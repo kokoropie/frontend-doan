@@ -1,7 +1,7 @@
 'use client'
 
 import { AppContext } from "@/contexts/app-context"
-import { useContext, useEffect, useState } from "react"
+import { useContext, useEffect, useMemo, useState } from "react"
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";
 import { Button } from "../ui/button";
 import { httpGet, httpPost } from "@/lib/http";
@@ -30,6 +30,10 @@ export default ({open = false, hide = () => {}}) => {
   }
 
   const [data, setData] = useState([]);
+
+  const hasUnread = useMemo(() => {
+    return data.some(item => !item.is_read);
+  }, [data])
 
   const loadData = () => {
     if (loading) return;
@@ -67,7 +71,7 @@ export default ({open = false, hide = () => {}}) => {
           </div>
         </ScrollArea>
         <DialogFooter>
-          <Button disabled={loading} onClick={handleMarkAsRead}>Đánh dấu đã đọc</Button>
+          <Button disabled={loading || !hasUnread} onClick={handleMarkAsRead}>Đánh dấu đã đọc</Button>
           <DialogClose asChild>
             <Button variant="outline" disabled={loading}>
               Đóng
