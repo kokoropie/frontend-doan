@@ -5,8 +5,9 @@ import { useContext, useEffect, useState } from "react"
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader } from "../ui/dialog";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { Button } from "../ui/button";
-import { httpGet } from "@/lib/http";
+import { httpGet, httpPost } from "@/lib/http";
 import { ScrollArea } from "../ui/scroll-area";
+import { toast } from "sonner";
 
 export default ({open = false, hide = () => {}}) => {
   const appContext = useContext(AppContext);
@@ -19,7 +20,13 @@ export default ({open = false, hide = () => {}}) => {
   }
 
   const handleMarkAsRead = () => {
-
+    httpPost(appContext.getRoute('notifications.mark-as-read')).then(() => {
+      toast.success('Đã đánh dấu tất cả thông báo là đã đọc');
+      hide();
+    }).catch(err => {
+      console.error(err);
+      toast.error('Đánh dấu thông báo là đã đọc không thành công');
+    });
   }
 
   const [data, setData] = useState([]);
@@ -44,7 +51,7 @@ export default ({open = false, hide = () => {}}) => {
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="max-w-lg">
+      <DialogContent className="!max-w-lg">
         <DialogHeader>
           <DialogTitle>Thông báo</DialogTitle>
         </DialogHeader>
