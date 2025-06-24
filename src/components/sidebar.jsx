@@ -6,21 +6,31 @@ import { Blocks, BookCopy, BookPlus, BookUser, Calendar, ChevronsUpDown, Gauge, 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import SidebarItem from "./sidebar/item";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "./ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import nProgress from "nprogress";
 import { AppContext } from "@/contexts/app-context";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
+import NotificationModal from "./modal/notification-modal";
 
 export default function Sidebar({ ...props }) {
   const pathname = usePathname();
   const appContext = useContext(AppContext);
+  const [showNotification, setShowNotification] = useState(false);
 
   const handleLogout = () => {
     nProgress.start();
     window.location.href = '/auth/logout'
+  }
+
+  const handleShowNotification = () => {
+    setShowNotification(true);
+  }
+
+  const handleShowModalSendNotification = () => {
+
   }
 
   return (
@@ -99,16 +109,16 @@ export default function Sidebar({ ...props }) {
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               {appContext.hasRole('admin', 'teacher') && <DropdownMenuItem asChild>
-                <Button onClick={(() => nProgress.start())} variant="ghost" className="w-full justify-start">
+                <Button onClick={handleShowModalSendNotification} variant="ghost" className="w-full justify-start">
                   <Send />
                   Gửi thông báo
                 </Button>
               </DropdownMenuItem>}
               {!appContext.hasRole('admin') && <DropdownMenuItem asChild>
-                <Button onClick={(() => nProgress.start())} variant="ghost" className="w-full justify-start">
+                <Button onClick={handleShowNotification} variant="ghost" className="w-full justify-start">
                   <MessageCircle />
                   Thông báo
-                  {appContext.user?.received_notifications_count && <Badge className="ml-1" variant="destructive">{ appContext.user?.received_notifications_count }</Badge>}
+                  {appContext.user?.received_notifications_count && <Badge className="ml-auto rounded-full" variant="destructive">{ appContext.user?.received_notifications_count }</Badge>}
                 </Button>
               </DropdownMenuItem>}
               <DropdownMenuItem onClick={handleLogout} variant="destructive">
@@ -120,6 +130,7 @@ export default function Sidebar({ ...props }) {
         </SidebarMenu>}
       </SidebarFooter>
       <SidebarRail />
+      {showNotification && <NotificationModal open={showNotification} hide={() => setShowNotification(false)} />}
     </SidebarBase>
   )
 }
