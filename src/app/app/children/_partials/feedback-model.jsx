@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { AppContext } from "@/contexts/app-context";
 import { httpPost } from "@/lib/http";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -128,7 +129,7 @@ export default ({ open = false, hide = () => {}, score = null, onSuccess = () =>
                   <FormItem>
                     <FormLabel>Phản hồi</FormLabel>
                     <FormControl>
-                      <Input type="text" {...field} />
+                      <Textarea {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
