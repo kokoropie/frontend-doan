@@ -79,7 +79,7 @@ export default ({ counts }) => {
         }
       })
       .catch((error) => {
-        console.error("Error fetching top students:", error);
+        console.error("Error fetching top students: ", error);
       });
   };
   const fetchYearData = async () => {
@@ -90,7 +90,7 @@ export default ({ counts }) => {
         }
       })
       .catch((error) => {
-        console.error("Error fetching chart students:", error);
+        console.error("Error fetching chart students: ", error);
       });
   }
   const fetchFeedbackData = async () => {
@@ -103,7 +103,7 @@ export default ({ counts }) => {
         }
       })
       .catch((error) => {
-        console.error("Error fetching feedback data:", error);
+        console.error("Error fetching feedback data: ", error);
       })
       .finally(() => {
         setFeedbackLoading(false);
