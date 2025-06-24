@@ -6,6 +6,7 @@ import { AppContext } from "@/contexts/app-context";
 import { httpDelete, httpPatch, httpPost } from "@/lib/http";
 import { Check, Edit, Trash, X } from "lucide-react";
 import { useContext, useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
 
 export default ({ student, _class, type, score = null }) => {
   const appContext = useContext(AppContext);
@@ -80,10 +81,10 @@ export default ({ student, _class, type, score = null }) => {
       <Button
         variant="ghost" 
         size="icon" 
-        className="p-0 h-6 w-6" 
+        className="ml-1 p-0 h-6 w-6" 
         onClick={handleChange}
       >
-        <Check className="ml-1 h-4 w-4 text-green-500" />
+        <Check className="h-4 w-4 text-green-500" />
       </Button>
       {sScore?.id ? <Button
         variant="ghost" 
