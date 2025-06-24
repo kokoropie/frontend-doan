@@ -15,32 +15,14 @@ import { Area, AreaChart, CartesianAxis, CartesianGrid, XAxis, YAxis } from "rec
 export default ({ counts }) => {
   const appContext = useContext(AppContext);
 
-  const yearData = [
-    { key: "2021 - 2022", value: 80 },
-    { key: "2022 - 2023", value: 128 },
-    { key: "2023 - 2024", value: 130 },
-    { key: "2024 - 2025", value: 122 }
-  ];
+  const [yearData, setYearData] = useState([]);
   const yearConfig = {
     value: {
       label: "Số học sinh",
       color: "var(--primary)",
     },
   }
-  const feedbackData = [
-    { key: "1", value: 12 },
-    { key: "2", value: 15 },
-    { key: "3", value: 8 },
-    { key: "4", value: 20 },
-    { key: "5", value: 18 },
-    { key: "6", value: 5 },
-    { key: "7", value: 0 },
-    { key: "8", value: 0 },
-    { key: "9", value: 0 },
-    { key: "10", value: 0 },
-    { key: "11", value: 0 },
-    { key: "12", value: 0 },
-  ]
+  const [feedbackData, setFeedbackData] = useState([])
   const feedbackConfig = {
     value: {
       label: "Số phản hồi",
@@ -87,21 +69,49 @@ export default ({ counts }) => {
     },
   ];
   const [dataYearTop, setDataYearTop] = useState([]);
+  
+  const fetchTopStudents = async () => {
+    httpGet(appContext.getRoute('dashboard.top-score'))
+      .then((response) => {
+        if (response.data) {
+          setDataYearTop(response.data.data);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching top students:", error);
+      });
+  };
+  const fetchYearData = async () => {
+    httpGet(appContext.getRoute('dashboard.students'))
+      .then((response) => {
+        if (response.data) {
+          setYearData(response.data.data);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching chart students:", error);
+      });
+  }
+  const fetchFeedbackData = async () => {
+    httpGet(appContext.getRoute('dashboard.feedback'), { params: { year } })
+      .then((response) => {
+        if (response.data) {
+          setFeedbackData(response.data.data);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching feedback data:", error);
+      });
+  }
 
   useEffect(() => {
-    const fetchTopStudents = async () => {
-      httpGet(appContext.getRoute('dashboard.top-score'))
-        .then((response) => {
-          if (response.data) {
-            setDataYearTop(response.data.data);
-          }
-        })
-        .catch((error) => {
-          console.error("Error fetching top students:", error);
-        });
-    };
     fetchTopStudents();
+    fetchYearData();
   }, [])
+
+  useEffect(() => {
+    fetchFeedbackData();
+  }, [year])
 
   return <div className="space-y-3">
     <div className="grid grid-cols-5 gap-3">
