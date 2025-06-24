@@ -105,7 +105,7 @@ export default ({ student, _class, type, score = null }) => {
 
   return <div className="w-30 flex items-center justify-between">
     <span className="pl-1">{sScore?.score ?? '-'}</span>
-    {score.show_actions && (
+    {sScore?.show_actions && (
       <Button
         variant="ghost" 
         size="icon" 
