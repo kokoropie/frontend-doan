@@ -136,7 +136,7 @@ export default function Selector({
       <PopoverContent className="w-auto p-0" align={align} side={side}>
         <Command>
           {searchable && <CommandInput placeholder={searchText} className="h-9" />}
-          <ScrollArea className="max-h-96">
+          <ScrollArea className="h-64">
             <CommandList>
               <CommandEmpty>{emptyDataText}</CommandEmpty>
               <CommandGroup>
