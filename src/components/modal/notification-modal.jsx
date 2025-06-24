@@ -6,6 +6,7 @@ import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader } from "
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { Button } from "../ui/button";
 import { httpGet } from "@/lib/http";
+import { ScrollArea } from "../ui/scroll-area";
 
 export default ({open = false, hide = () => {}}) => {
   const appContext = useContext(AppContext);
@@ -43,19 +44,21 @@ export default ({open = false, hide = () => {}}) => {
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent>
+      <DialogContent className="max-w-lg">
         <DialogHeader>
           <DialogTitle>Thông báo</DialogTitle>
         </DialogHeader>
-        <div className="space-y-0.5">
-          {data.map((item, index) => (
-            <div key={index} className={`p-2 rounded-md ${item.is_read ? 'bg-gray-100' : 'bg-blue-100'}`}>
-              <div className="text-sm font-semibold">{item.title}</div>
-              <div className="text-xs text-gray-600">{item.message}</div>
-              <div className="text-xs text-gray-400 mt-1">{new Date(item.created_at).toLocaleString()}</div>
-            </div>
-          ))}
-        </div>
+        <ScrollArea className="h-[50vh]">
+          <div className="space-y-0.5">
+            {data.map((item, index) => (
+              <div key={index} className={`p-2 rounded-md ${item.is_read ? 'bg-gray-100' : 'bg-blue-100'}`}>
+                <div className="text-sm font-semibold">{item.title}</div>
+                <div className="text-xs text-gray-600">{item.message}</div>
+                <div className="text-xs text-gray-400 mt-1">{item.created_at}</div>
+              </div>
+            ))}
+          </div>
+        </ScrollArea>
         <DialogFooter>
           <Button disabled={loading} onClick={handleMarkAsRead}>Đánh dấu đã đọc</Button>
           <DialogClose asChild>
