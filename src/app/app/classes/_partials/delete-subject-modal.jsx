@@ -14,7 +14,7 @@ export default function DeleteSubjectModal({ open = false, hide = () => { }, yea
   const handleSubmit = async () => {
     if (submitting) return;
     setSubmitting(true);
-    httpDelete(appContext.getRoute('classes.subjects.destroy', [_class.id, subject.link_id]))
+    httpDelete(appContext.getRoute('classes.subjects.destroy', [_class.id, subject.linked_id]))
       .then(res => {
         const msg = res.headers?.['x-message'] ?? null;
         if (res.status >= 200 && res.status < 300) {
