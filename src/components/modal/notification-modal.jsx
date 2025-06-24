@@ -2,7 +2,7 @@
 
 import { AppContext } from "@/contexts/app-context"
 import { useContext, useEffect, useState } from "react"
-import { Dialog, DialogContent, DialogFooter, DialogHeader } from "../ui/dialog";
+import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader } from "../ui/dialog";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { Button } from "../ui/button";
 import { httpGet } from "@/lib/http";
