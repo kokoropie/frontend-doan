@@ -109,7 +109,7 @@ export default function Sidebar({ ...props }) {
               <DropdownMenuItem asChild>
                 <Link href={'/auth/logout'} onClick={(() => nProgress.start())}>
                   <LogOut />
-                  Đăng xuất
+                  Đăng xuất 
                 </Link>
               </DropdownMenuItem>
             </DropdownMenuContent>
