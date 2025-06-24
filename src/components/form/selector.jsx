@@ -6,7 +6,6 @@ import { Button } from "../ui/button"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "../ui/command"
 import { CommandList } from "cmdk"
 import { Check, ChevronsUpDown } from "lucide-react"
-import { ScrollArea } from "../ui/scroll-area";
 import { cn } from "@/lib/utils"
 
 export default function Selector({
@@ -136,28 +135,26 @@ export default function Selector({
       <PopoverContent className="w-auto p-0" align={align} side={side}>
         <Command>
           {searchable && <CommandInput placeholder={searchText} className="h-9" />}
-          <ScrollArea className="h-64">
-            <CommandList>
-              <CommandEmpty>{emptyDataText}</CommandEmpty>
-              <CommandGroup>
-                {options.map((option) => (
-                  <CommandItem
-                    key={option[index]}
-                    value={`${option[index]}`}
-                    onSelect={handleSetValue}
-                  >
-                    {showLabel(option)}
-                    <Check
-                      className={cn(
-                        "ml-auto",
-                        isSelected(option[index]) ? "opacity-100" : "opacity-0"
-                      )}
-                    />
-                  </CommandItem>
-                ))}
-              </CommandGroup>
-            </CommandList>
-          </ScrollArea>
+          <CommandList className="max-h-32">
+            <CommandEmpty>{emptyDataText}</CommandEmpty>
+            <CommandGroup>
+              {options.map((option) => (
+                <CommandItem
+                  key={option[index]}
+                  value={`${option[index]}`}
+                  onSelect={handleSetValue}
+                >
+                  {showLabel(option)}
+                  <Check
+                    className={cn(
+                      "ml-auto",
+                      isSelected(option[index]) ? "opacity-100" : "opacity-0"
+                    )}
+                  />
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          </CommandList>
         </Command>
       </PopoverContent>
     </Popover>
