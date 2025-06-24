@@ -22,7 +22,8 @@ export default ({ counts }) => {
       color: "var(--primary)",
     },
   }
-  const [feedbackData, setFeedbackData] = useState([])
+  const [feedbackData, setFeedbackData] = useState([]);
+  const [feebackLoading, setFeedbackLoading] = useState(false);
   const feedbackConfig = {
     value: {
       label: "Số phản hồi",
@@ -93,6 +94,8 @@ export default ({ counts }) => {
       });
   }
   const fetchFeedbackData = async () => {
+    if (feebackLoading) return;
+    setFeedbackLoading(true);
     httpGet(appContext.getRoute('dashboard.feedback'), { params: { year } })
       .then((response) => {
         if (response.data) {
@@ -101,6 +104,9 @@ export default ({ counts }) => {
       })
       .catch((error) => {
         console.error("Error fetching feedback data:", error);
+      })
+      .finally(() => {
+        setFeedbackLoading(false);
       });
   }
 
