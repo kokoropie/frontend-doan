@@ -6,10 +6,14 @@ const AUTH_CACHE_DURATION = 30; // seconds
 const authCache = new Map();
 
 export async function middleware(request) {
+    if (request.headers.get("x-middleware-prefetch") === "1") {
+        return NextResponse.next();
+    }
     if (!request.nextUrl.pathname.startsWith("/_next")) {
         if (request.nextUrl.pathname === "/") {
             return NextResponse.redirect(new URL("/app", request.url));
         } else if (request.nextUrl.pathname.startsWith("/auth/logout")) {
+            
             axios.delete(
                 `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/auth/logout`, {
                     headers: {
