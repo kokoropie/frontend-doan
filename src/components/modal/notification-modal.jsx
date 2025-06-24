@@ -27,7 +27,7 @@ export default ({open = false, hide = () => {}}) => {
     if (loading) return;
     setLoading(true);
     httpGet(appContext.getRoute('notifications.index')).then((res) => {
-      setData(res.data.data);
+      setData(res.data.data.data);
     }).finally(() => {
       setLoading(false);
     })
