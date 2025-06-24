@@ -37,7 +37,7 @@ export default ({ student, _class, type, score = null }) => {
         student_id: student.id,
         score: value,
         type: type,
-        class_subject_semester_id: score.linked_id
+        class_subject_semester_id: score.linked_id 
       }).then((res) => {
         setEdit(false);
         setScore(res.data.data);
