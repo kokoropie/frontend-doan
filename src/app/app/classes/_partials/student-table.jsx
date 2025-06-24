@@ -7,10 +7,11 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Separator } from "@/components/ui/separator";
 import { httpGet } from "@/lib/http";
 import { userSort } from "@/lib/utils";
-import { Edit, MoreHorizontal, Trash, X } from "lucide-react";
+import { MoreHorizontal, Table2, X } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { AppContext } from "@/contexts/app-context";
+import StudentScoreModal from "./student-score-modal";
 
 export default ({ _class = null, setClass = () => {} }) => {
   const appContext = useContext(AppContext);
@@ -18,10 +19,10 @@ export default ({ _class = null, setClass = () => {} }) => {
   const [meta, setMeta] = useState(null);
   const [loading, setLoading] = useState(false);
   const [modal, setModal] = useState('');
-  const [modalSubject, setModalStudent] = useState(null);
+  const [modalStudent, setModalStudent] = useState(null);
 
-  const showModal = (sSemester, sView) => {
-    setModalStudent(sSemester);
+  const showModal = (sStudent, sView) => {
+    setModalStudent(sStudent);
     setModal(sView);
   }
 
@@ -56,24 +57,10 @@ export default ({ _class = null, setClass = () => {} }) => {
       enableHiding: false,
       cell: ({ row }) => {
         return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <span className="sr-only">Open menu</span>
-                <MoreHorizontal />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => showModal(row.original, 'edit')}>
-                <Edit />
-                <span>Chỉnh sửa</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem variant="destructive" onClick={() => showModal(row.original, 'delete')}>
-                <Trash />
-                <span>Xoá</span>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <Button onClick={() => showModal(row.original, 'scores')} variant="ghost" className="size-8 p-0" title="Bảng điểm">
+            <span className="sr-only">Bảng điểm</span>
+            <Table2 />
+          </Button>
         )
       },
     },
@@ -154,9 +141,9 @@ export default ({ _class = null, setClass = () => {} }) => {
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-semibold">Học sinh lớp {_class.name} ({_class.year?.year})</h2>
           <div className="flex items-center">
-            <Button className="ml-2" size="sm" disabled={loading} onClick={() => showModal(null, 'add')}>
+            {/* <Button className="ml-2" size="sm" disabled={loading} onClick={() => showModal(null, 'add')}>
               Thêm
-            </Button>
+            </Button> */}
             <Button size="sm" variant="secondary" className="ml-2" disabled={loading} onClick={() => setClass(null)}>
               <X />
               <span className="sr-only">Close</span>
@@ -177,21 +164,17 @@ export default ({ _class = null, setClass = () => {} }) => {
         }} _class={_class} 
         semester={_class?.semesters?.find(i => i.id == semester)} 
         teachers={teachers} 
-        students={students?.filter(i => !data?.find(j => j.id == i.id) || i.id == modalSubject?.id)} 
-        subject={modalSubject} 
+        students={students?.filter(i => !data?.find(j => j.id == i.id) || i.id == modalStudent?.id)} 
+        subject={modalStudent} 
         onSuccess={(y) => {
           setModalStudent(null)
           setModal('');
           loadData(1, true);
         }} /> */}
-      {/* <DeleteSemesterModal open={modalSubject && modal == 'delete'} hide={() => {
+      <StudentScoreModal open={modalStudent && modal == 'scores'} hide={() => {
         setModalStudent(null)
         setModal('');
-      }} teachers={teachers} semesters={modalSubject} setSemesters={setModalStudent} onSuccess={() => {
-        setModalStudent(null)
-        setModal('');
-        loadData(1, true);
-      }} /> */}
+      }} _class={_class} student={modalStudent} />
     </Card>
   );
 }

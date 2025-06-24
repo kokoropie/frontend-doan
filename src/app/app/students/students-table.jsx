@@ -91,7 +91,7 @@ export default ({student = null, setStudent = () => {}, view = '', setView = () 
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => handleSetStudent(student, 'scores')}>
+              <DropdownMenuItem onClick={() => showModal(student, 'scores')}>
                 <Table2 />
                 <span>Xem bảng điểm</span>
               </DropdownMenuItem>

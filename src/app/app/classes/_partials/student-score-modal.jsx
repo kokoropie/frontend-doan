@@ -1,23 +1,19 @@
 'use client';
-
-import { useContext, useEffect, useMemo, useState } from "react";
-import { AppContext } from "@/contexts/app-context";
-import Selector from "@/components/form/selector";
 import Table from "@/components/table";
-import { Card, CardContent, CardFooter, CardTitle } from "@/components/ui/card";
-import { httpGet } from "@/lib/http";
 import Block from "@/components/ui/block";
+import { Button } from "@/components/ui/button";
+import { httpGet } from "@/lib/http";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
+import { AppContext } from "@/contexts/app-context";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import InputScore from "./input-score";
+import * as XLSX from "xlsx";
 
-export default () => {
+export default ({ open = false, hide = () => { }, _class = null, student = null }) => {
   const appContext = useContext(AppContext);
-
-  const [_class, setClass] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [data, setData] = useState({});
-
-  const [year, setYear] = useState(null);
-  const [listYears, setListYears] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const typeScores = {
     'other': 'Khác',
@@ -77,13 +73,6 @@ export default () => {
         <div>{row.getValue("average")}</div>
       ),
     });
-    columns.push({
-      accessorKey: "rank",
-      header: "Xếp hạng",
-      cell: ({ row }) => (
-        <div>{row.getValue("rank")}</div>
-      ),
-    });
     return columns;
   }, [typeScores]);
 
@@ -92,8 +81,7 @@ export default () => {
     subjects.forEach((subject) => {
       const row = {
         subject: subject,
-        average: '0.00',
-        rank: 0,
+        average: '0.00'
       };
       let totalScores = 0;
       let count = 0;
@@ -106,8 +94,6 @@ export default () => {
       });
       if (count) {
         row.average = (totalScores / count).toFixed(2);
-        const rank = data[subject.id + '_avg'] ? Math.round((1 - row.average / data[subject.id + '_avg']) * _class.students_count) : 0
-        row.rank = rank < 0 ? 1 : rank
       }
       _data.push(row);
     });
@@ -115,47 +101,7 @@ export default () => {
   }, [subjects, data]);
 
   useEffect(() => {
-    if (appContext.loading) {
-      return;
-    }
-    httpGet(appContext.getRoute('academic-years.index'), {
-      params: {
-        no_relations: 1,
-        no_pagination: 1
-      }
-    }).then((res) => {
-      if (res.status === 200) {
-        const { data } = res.data.data;
-        setListYears(data);
-        setYear(data.length > 0 ? data[0] : null);
-      } else {
-        toast.error(res.data.message);
-      }
-    })
-  }, [appContext.loading]);
-
-  useEffect(() => {
-    if (year) {
-      httpGet(appContext.getRoute('classes.index'), {
-        params: {
-          no_relations: 1,
-          no_pagination: 1,
-          year: year.id,
-          count: ['students']
-        }
-      }).then((res) => {
-        if (res.status === 200) {
-          const { data } = res.data.data;
-          setClass(data[0]);
-        } else {
-          toast.error(res.data.message);
-        }
-      })
-    }
-  }, [year]);
-
-  useEffect(() => {
-    if (_class && year) {
+    if (_class) {
       setLoading(true);
       setSubjects([]);
       httpGet(appContext.getRoute('classes.subjects.index', [_class.id]), {
@@ -174,15 +120,15 @@ export default () => {
         setLoading(false);
       });
     }
-  }, [_class, year]);
+  }, [_class]);
 
   useEffect(() => {
     setData({});
-    if (subjects.length && year) {
+    if (subjects.length && _class && student) {
       setLoading(true);
-      httpGet(appContext.getRoute('users.scores.index', [appContext.user.id]), {
+      httpGet(appContext.getRoute('users.scores.index', [student.id]), {
         params: {
-          year: year.id
+          year: _class.year.id
         }
       }).then((res) => {
         if (res.status === 200) {
@@ -195,40 +141,23 @@ export default () => {
         setLoading(false);
       });
     }
-  }, [year, subjects]);
-
-  if (appContext.loading) {
-    return <div className="flex items-center justify-center w-full h-full">Loading...</div>
-  }
+  }, [_class, student, subjects]);
+  
+  if (!_class || !student) return null;
 
   return (
-    <div>
-      <div className="flex items-center gap-2 mb-4">
-        <span>Lớp {_class?.name}</span>
-      </div>
-      <Card>
-        <CardContent>
-          <CardTitle>Bảng điểm</CardTitle>
-          <Block isBlocking={loading}>
-            <Table data={dataScores} columns={columnsScores} />
-          </Block>
-          <CardFooter className="border-t">
-            <span>Năm học</span>
-            <Selector
-              className="ml-2"
-              placeholder="Năm học"
-              defaultValue={year}
-              options={listYears}
-              index="id"
-              label="year"
-              onChange={(sYear) => {
-                setYear(sYear);
-              }}
-              unselectable={false}
-            />
-          </CardFooter>
-        </CardContent>
-      </Card>
-    </div>
+    <Dialog open={open} onOpenChange={hide}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Bảng điểm {student?.full_name}</DialogTitle>
+        </DialogHeader>
+        <div className="flex items-center">
+          <Button size="sm" disabled={loading} onClick={exportExcel}>Xuất dữ liệu</Button>
+        </div>
+        <Block isBlocking={loading}>
+          <Table data={dataScores} columns={columnsScores} columnPining={{left: ['subject']}} limit={10} tableClassName="max-h-[calc(100vh-250px)] overflow-y-auto" />
+        </Block>
+      </DialogContent>
+    </Dialog>
   );
 }
