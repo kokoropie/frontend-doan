@@ -105,15 +105,13 @@ export default ({ student, _class, type, score = null }) => {
 
   return <div className="w-30 flex items-center justify-between">
     <span className="pl-1">{sScore?.score ?? '-'}</span>
-    {sScore?.show_actions && (
-      <Button
-        variant="ghost" 
-        size="icon" 
-        className="ml-2 p-0 h-6 w-6" 
-        onClick={() => setEdit(true)}
-      >
-        <Edit className="h-4 w-4" />
-      </Button>
-    )}
+    <Button
+      variant="ghost" 
+      size="icon" 
+      className="ml-2 p-0 h-6 w-6" 
+      onClick={() => setEdit(true)}
+    >
+      <Edit className="h-4 w-4" />
+    </Button>
   </div>
 }
