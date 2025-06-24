@@ -44,6 +44,23 @@ export const AppProvider = ({ children }) => {
     }
   }, [token, user, role, refreshToken, init])
 
+  useEffect(() => {
+    if (!token) return;
+    const interval = setInterval(() => {
+      httpGet("routes").then(res => {
+        if (res.status === 200) {
+          setRoutes(res.data);
+        }
+      }).catch(() => {});
+      httpGet("profile").then(res => {
+        if (res.status === 200) {
+          setUser(res.data.data);
+        }
+      }).catch(() => {});
+    }, 120 * 1000)
+    return () => clearInterval(interval);
+  }, [token])
+
   return (
     <AppContext.Provider value={{
       loading: !init,
