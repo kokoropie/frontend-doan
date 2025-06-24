@@ -134,9 +134,9 @@ export default function Selector({
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0" align={align} side={side}>
-        <ScrollArea className="max-h-96">
-          <Command>
-            {searchable && <CommandInput placeholder={searchText} className="h-9" />}
+        <Command>
+          {searchable && <CommandInput placeholder={searchText} className="h-9" />}
+          <ScrollArea className="max-h-96">
             <CommandList>
               <CommandEmpty>{emptyDataText}</CommandEmpty>
               <CommandGroup>
@@ -157,8 +157,8 @@ export default function Selector({
                 ))}
               </CommandGroup>
             </CommandList>
-          </Command>
-        </ScrollArea>
+          </ScrollArea>
+        </Command>
       </PopoverContent>
     </Popover>
   )
