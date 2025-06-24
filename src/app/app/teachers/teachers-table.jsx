@@ -86,19 +86,6 @@ export default ({teacher = null, setTeacher = () => {}, view = '', setView = () 
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => handleSetTeacher(teacher, 'students')}>
-                <GraduationCap />
-                <span>Xem học sinh</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleSetTeacher(teacher, 'subjects')}>
-                <Table2 />
-                <span>Xem môn học</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleSetTeacher(teacher, 'scores')}>
-                <Table2 />
-                <span>Xem bảng điểm</span>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
               <DropdownMenuItem onClick={() => showModal(teacher, 'edit')}>
                 <Edit />
                 <span>Chỉnh sửa</span>
