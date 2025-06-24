@@ -94,13 +94,13 @@ export default function Sidebar({ ...props }) {
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               {appContext.hasRole('admin', 'teacher') && <DropdownMenuItem asChild>
-                <Button onClick={(() => nProgress.start())}>
+                <Button onClick={(() => nProgress.start())} variant="ghost" className="w-full justify-start">
                   <Send />
                   Gửi thông báo
                 </Button>
               </DropdownMenuItem>}
               {!appContext.hasRole('admin') && <DropdownMenuItem asChild>
-                <Button onClick={(() => nProgress.start())}>
+                <Button onClick={(() => nProgress.start())} variant="ghost" className="w-full justify-start">
                   <MessageCircle />
                   Thông báo
                   {appContext.user?.received_notifications_count && <Badge className="ml-1" variant="destructive">{ appContext.user?.received_notifications_count }</Badge>}
