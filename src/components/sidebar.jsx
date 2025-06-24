@@ -118,7 +118,7 @@ export default function Sidebar({ ...props }) {
                 <Button onClick={handleShowNotification} variant="ghost" className="w-full justify-start">
                   <MessageCircle />
                   Thông báo
-                  {appContext.user?.received_notifications_count && <Badge className="ml-auto rounded-full" variant="destructive">{ appContext.user?.received_notifications_count }</Badge>}
+                  {appContext.user?.received_notifications_count ? <Badge className="ml-auto rounded-full" variant="destructive">{ appContext.user?.received_notifications_count }</Badge> : null}
                 </Button>
               </DropdownMenuItem>}
               <DropdownMenuItem onClick={handleLogout} variant="destructive">
