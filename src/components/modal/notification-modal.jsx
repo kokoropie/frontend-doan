@@ -2,8 +2,7 @@
 
 import { AppContext } from "@/contexts/app-context"
 import { useContext, useEffect, useState } from "react"
-import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader } from "../ui/dialog";
-import { DialogTitle } from "@radix-ui/react-dialog";
+import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";
 import { Button } from "../ui/button";
 import { httpGet, httpPost } from "@/lib/http";
 import { ScrollArea } from "../ui/scroll-area";
